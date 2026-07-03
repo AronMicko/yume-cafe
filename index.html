@@ -169,18 +169,23 @@
     aspect-ratio:4/5;background:var(--moss);
     border-radius:2px;position:relative;overflow:hidden;
     display:flex;align-items:center;justify-content:center;
+    touch-action:none;
+    cursor:grab;
   }
+  .about-art:active{cursor:grabbing;}
   .about-art .bowl{
     width:60%;aspect-ratio:1;border-radius:50%;
     background:radial-gradient(circle at 35% 30%, #8FA05C, var(--matcha) 55%, var(--matcha-deep) 100%);
     box-shadow:0 20px 50px rgba(0,0,0,0.3);
     position:relative;
     transition:transform 0.4s ease;
+    overflow:hidden;
   }
   .about-art:hover .bowl{transform:scale(1.04) rotate(2deg);}
   .about-art .bowl::after{
     content:'';position:absolute;inset:14%;border-radius:50%;
     border:2px solid rgba(246,241,228,0.25);
+    z-index:2;
   }
   .about-art .steam{
     position:absolute;
@@ -199,10 +204,40 @@
     30%{opacity:0.6;}
     100%{opacity:0;transform:translateY(-46px) scaleY(1.4);}
   }
+  .about-art .foam{
+    position:absolute;left:0;right:0;bottom:0;
+    height:0%;
+    background:
+      radial-gradient(circle at 20% 30%, rgba(246,241,228,0.9) 0 6%, transparent 7%) ,
+      radial-gradient(circle at 55% 15%, rgba(246,241,228,0.85) 0 5%, transparent 6%),
+      radial-gradient(circle at 80% 35%, rgba(246,241,228,0.9) 0 7%, transparent 8%),
+      radial-gradient(circle at 35% 60%, rgba(246,241,228,0.8) 0 5%, transparent 6%),
+      linear-gradient(to top, rgba(246,241,228,0.95), rgba(246,241,228,0.55));
+    background-size:200% 200%, 200% 200%, 200% 200%, 200% 200%, 100% 100%;
+    transition:height 0.35s cubic-bezier(.2,.8,.2,1);
+    z-index:1;
+  }
+  .about-art .whisk-hint{
+    position:absolute;bottom:10px;left:0;right:0;text-align:center;
+    font-size:11px;letter-spacing:0.14em;text-transform:uppercase;
+    color:rgba(246,241,228,0.8);z-index:3;
+    transition:opacity 0.3s;
+    pointer-events:none;
+  }
+  .about-art .froth-pct{
+    position:absolute;top:10px;right:12px;
+    font-family:'Shippori Mincho',serif;
+    font-size:13px;color:rgba(246,241,228,0.9);
+    z-index:3;letter-spacing:0.04em;
+  }
   .about-text p{margin-bottom:16px;font-size:16px;opacity:0.88;}
   .about-text .signature-line{
     margin-top:28px;padding-top:24px;border-top:1px solid var(--line);
     font-family:'Shippori Mincho',serif;font-style:normal;color:var(--matcha-deep);font-size:15px;
+  }
+  .about-text .whisk-status{
+    margin-top:18px;font-size:13.5px;color:var(--matcha-deep);
+    min-height:20px;
   }
 
   /* -------- MENU -------- */
@@ -210,10 +245,11 @@
   @media(max-width:800px){.menu-grid{grid-template-columns:1fr;}}
   .menu-item{
     background:var(--washi);padding:34px 30px;
-    transition:background 0.25s, transform 0.25s;
+    transition:background 0.25s, transform 0.25s, box-shadow 0.25s;
     cursor:default;
+    position:relative;
   }
-  .menu-item:hover{background:var(--washi-soft);transform:translateY(-3px);}
+  .menu-item:hover{background:var(--washi-soft);transform:translateY(-3px);box-shadow:0 14px 26px -18px rgba(56,65,42,0.35);}
   .menu-item .num{font-size:12px;color:var(--gold);letter-spacing:0.1em;margin-bottom:14px;display:block;}
   .menu-item h3{font-size:22px;margin-bottom:8px;}
   .menu-item p{font-size:14px;opacity:0.7;}
@@ -303,6 +339,8 @@
     margin-top:36px;padding-top:20px;border-top:1px solid rgba(246,241,228,0.12);
     font-size:12px;opacity:0.5;display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;
   }
+  .footer-bottom a{border-bottom:1px solid rgba(246,241,228,0.3);transition:opacity 0.2s, border-color 0.2s;}
+  .footer-bottom a:hover{opacity:0.85;border-color:rgba(246,241,228,0.7);}
 
   /* -------- SCROLL TO TOP -------- */
   .to-top{
@@ -338,63 +376,9 @@
   a:focus-visible, button:focus-visible{
     outline:2px solid var(--gold);outline-offset:3px;
   }
-
-  /* -------- SPLASH INTRO -------- */
-  #splash{
-    position:fixed;inset:0;z-index:999;
-    background:var(--moss);
-    display:flex;align-items:center;justify-content:center;
-    transition:opacity 0.5s ease, visibility 0.5s ease;
-  }
-  #splash.hide{opacity:0;visibility:hidden;pointer-events:none;}
-  .splash-mark{
-    font-family:'Shippori Mincho',serif;
-    font-size:56px;color:var(--washi);
-    opacity:0;transform:scale(0.82);
-    animation:splashIn 0.6s cubic-bezier(.16,.84,.44,1) forwards;
-  }
-  .splash-sub{
-    position:absolute;bottom:14%;left:0;right:0;
-    text-align:center;
-    font-size:12px;letter-spacing:0.3em;text-transform:uppercase;
-    color:var(--gold);opacity:0;
-    animation:splashFade 0.6s ease 0.35s forwards;
-  }
-  @keyframes splashIn{to{opacity:1;transform:scale(1);}}
-  @keyframes splashFade{to{opacity:0.8;}}
-
-  /* -------- HERO WORD REVEAL -------- */
-  .hero-title .word{
-    display:inline-block;opacity:0;transform:translateY(26px);
-    animation:wordUp 0.65s cubic-bezier(.16,.84,.44,1) forwards;
-  }
-  .hero-title .word.accent{color:var(--gold);}
-  @keyframes wordUp{to{opacity:1;transform:translateY(0);}}
-
-  /* -------- LEAF PARTICLES -------- */
-  .leaf-particle{
-    position:fixed;
-    pointer-events:none;
-    z-index:80;
-    font-size:14px;
-    color:var(--matcha);
-    opacity:0.85;
-    will-change:transform,opacity;
-  }
-
-  @media (prefers-reduced-motion: reduce){
-    #splash{display:none;}
-    .hero-title .word{opacity:1;transform:none;animation:none;}
-    .leaf-particle{display:none;}
-  }
 </style>
 </head>
 <body>
-
-<div id="splash" aria-hidden="true">
-  <div class="splash-mark">夢</div>
-  <div class="splash-sub">Yume Cafe</div>
-</div>
 
 <header>
   <nav>
@@ -413,19 +397,11 @@
   <div class="hero-kanji" aria-hidden="true">夢</div>
   <div class="wrap hero-inner">
     <div class="eyebrow"><span class="rule"></span>Quiapo, Manila</div>
-    <h1 class="hero-title">
-      <span class="word" style="animation-delay:.05s">Slow</span>
-      <span class="word" style="animation-delay:.14s">down</span><br>
-      <span class="word" style="animation-delay:.23s">with</span>
-      <span class="word" style="animation-delay:.32s">a</span>
-      <span class="word" style="animation-delay:.41s">bowl</span>
-      <span class="word" style="animation-delay:.50s">of</span>
-      <span class="word accent" style="animation-delay:.59s">matcha.</span>
-    </h1>
+    <h1>Slow down<br>with a bowl of <em>matcha</em>.</h1>
     <p class="lede">Yume Cafe is a small matcha and houjicha bar tucked into J. Nepomuceno St., whisked to order, no shortcuts, made for lingering.</p>
     <div class="cta-row">
-      <a class="btn btn-solid magnetic" href="#menu">See the menu</a>
-      <a class="btn btn-outline magnetic" href="#visit">Find us</a>
+      <a class="btn btn-solid" href="#menu">See the menu</a>
+      <a class="btn btn-outline" href="#visit">Find us</a>
     </div>
     <div class="hero-meta">
       <div><span class="label">Hours</span>Mon–Sat 8am–8pm</div>
@@ -440,17 +416,22 @@
 <section class="about" id="about">
   <div class="wrap">
     <div class="about-grid">
-      <div class="about-art reveal">
-        <div class="bowl"></div>
+      <div class="about-art reveal" id="whiskBowl" role="button" tabindex="0" aria-label="Whisk the matcha bowl to raise a froth">
+        <div class="bowl">
+          <div class="foam" id="foamLayer"></div>
+        </div>
         <span class="steam"></span>
         <span class="steam"></span>
         <span class="steam"></span>
+        <span class="froth-pct" id="frothPct">0%</span>
+        <span class="whisk-hint" id="whiskHint">Drag to whisk</span>
       </div>
       <div class="about-text reveal">
         <div class="eyebrow"><span class="rule"></span>Our Story</div>
         <h2 style="margin-bottom:20px;font-size:clamp(28px,4vw,38px);">Yume means dream.</h2>
         <p>We started Yume Cafe with one focus: ceremonial-grade matcha and houjicha, prepared the way it's meant to be, whisked by hand, no syrupy shortcuts, just the plant and a little patience.</p>
         <p>Every cup is made to order in our little corner of Quiapo. Come for the matcha, stay for the quiet.</p>
+        <p class="whisk-status" id="whiskStatus">Try whisking the bowl, real matcha takes about 15 seconds of wrist work to bloom a proper froth.</p>
         <div class="signature-line">Yume Cafe, 604 J. Nepomuceno St.</div>
       </div>
     </div>
@@ -594,7 +575,7 @@
     </div>
     <div class="footer-bottom">
       <span>© 2026 Yume Cafe. All rights reserved.</span>
-      <span>Site by Aron Micko Labs</span>
+      <span><a href="https://aronmicko.github.io/yume-cafe/#visit" target="_blank" rel="noopener">Creative Collaboration with Aron Micko Labs</a></span>
     </div>
   </div>
 </footer>
@@ -673,6 +654,114 @@
       pickerResult.classList.add('show');
     }, 120);
   });
+
+  // Whisk-the-bowl mini interaction
+  (function(){
+    const bowlZone = document.getElementById('whiskBowl');
+    const foam = document.getElementById('foamLayer');
+    const pct = document.getElementById('frothPct');
+    const hint = document.getElementById('whiskHint');
+    const status = document.getElementById('whiskStatus');
+    if(!bowlZone || !foam) return;
+
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    let froth = 0;
+    let dragging = false;
+    let lastX = null, lastY = null;
+    let decayTimer = null;
+    let doneAnnounced = false;
+
+    const messages = {
+      start: "Try whisking the bowl, real matcha takes about 15 seconds of wrist work to bloom a proper froth.",
+      mid: "Keep going, a proper froth needs a brisk zig-zag, not a stir.",
+      near: "Almost there, fine and even bubbles mean it's nearly ready.",
+      done: "That's a proper froth. Ceremonial-grade matcha, whisked the traditional way."
+    };
+
+    function render(){
+      foam.style.height = froth + '%';
+      pct.textContent = Math.round(froth) + '%';
+      if(froth < 5){
+        hint.style.opacity = '1';
+        status.textContent = messages.start;
+        doneAnnounced = false;
+      } else if(froth < 45){
+        hint.style.opacity = '0';
+        status.textContent = messages.mid;
+      } else if(froth < 90){
+        status.textContent = messages.near;
+      } else {
+        status.textContent = messages.done;
+        if(!doneAnnounced){
+          doneAnnounced = true;
+        }
+      }
+    }
+
+    function addFroth(dx, dy){
+      const motion = Math.min(Math.hypot(dx, dy), 40);
+      if(motion < 1) return;
+      froth = Math.min(100, froth + motion * 0.35);
+      render();
+    }
+
+    function startDecay(){
+      clearInterval(decayTimer);
+      decayTimer = setInterval(()=>{
+        if(dragging) return;
+        if(froth <= 0){ clearInterval(decayTimer); return; }
+        froth = Math.max(0, froth - 1.2);
+        render();
+      }, 220);
+    }
+
+    function pointerPos(e){
+      if(e.touches && e.touches[0]) return {x:e.touches[0].clientX, y:e.touches[0].clientY};
+      return {x:e.clientX, y:e.clientY};
+    }
+
+    function onDown(e){
+      dragging = true;
+      const p = pointerPos(e);
+      lastX = p.x; lastY = p.y;
+    }
+    function onMove(e){
+      if(!dragging) return;
+      const p = pointerPos(e);
+      if(lastX !== null){ addFroth(p.x - lastX, p.y - lastY); }
+      lastX = p.x; lastY = p.y;
+      if(e.cancelable) e.preventDefault();
+    }
+    function onUp(){
+      if(!dragging) return;
+      dragging = false;
+      lastX = null; lastY = null;
+      startDecay();
+    }
+
+    bowlZone.addEventListener('pointerdown', (e)=>{ bowlZone.setPointerCapture(e.pointerId); onDown(e); });
+    bowlZone.addEventListener('pointermove', onMove);
+    bowlZone.addEventListener('pointerup', onUp);
+    bowlZone.addEventListener('pointercancel', onUp);
+    bowlZone.addEventListener('pointerleave', onUp);
+
+    // keyboard fallback: space/enter bumps froth a bit, accessible alternative to dragging
+    bowlZone.addEventListener('keydown', (e)=>{
+      if(e.key === ' ' || e.key === 'Enter'){
+        e.preventDefault();
+        froth = Math.min(100, froth + 12);
+        render();
+        clearInterval(decayTimer);
+        startDecay();
+      }
+    });
+
+    if(reduceMotion){
+      // still usable, just skip the decay ticking cadence being distracting; keep instant feedback
+    }
+
+    render();
+  })();
 </script>
 
 </body>
