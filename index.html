@@ -338,9 +338,63 @@
   a:focus-visible, button:focus-visible{
     outline:2px solid var(--gold);outline-offset:3px;
   }
+
+  /* -------- SPLASH INTRO -------- */
+  #splash{
+    position:fixed;inset:0;z-index:999;
+    background:var(--moss);
+    display:flex;align-items:center;justify-content:center;
+    transition:opacity 0.5s ease, visibility 0.5s ease;
+  }
+  #splash.hide{opacity:0;visibility:hidden;pointer-events:none;}
+  .splash-mark{
+    font-family:'Shippori Mincho',serif;
+    font-size:56px;color:var(--washi);
+    opacity:0;transform:scale(0.82);
+    animation:splashIn 0.6s cubic-bezier(.16,.84,.44,1) forwards;
+  }
+  .splash-sub{
+    position:absolute;bottom:14%;left:0;right:0;
+    text-align:center;
+    font-size:12px;letter-spacing:0.3em;text-transform:uppercase;
+    color:var(--gold);opacity:0;
+    animation:splashFade 0.6s ease 0.35s forwards;
+  }
+  @keyframes splashIn{to{opacity:1;transform:scale(1);}}
+  @keyframes splashFade{to{opacity:0.8;}}
+
+  /* -------- HERO WORD REVEAL -------- */
+  .hero-title .word{
+    display:inline-block;opacity:0;transform:translateY(26px);
+    animation:wordUp 0.65s cubic-bezier(.16,.84,.44,1) forwards;
+  }
+  .hero-title .word.accent{color:var(--gold);}
+  @keyframes wordUp{to{opacity:1;transform:translateY(0);}}
+
+  /* -------- LEAF PARTICLES -------- */
+  .leaf-particle{
+    position:fixed;
+    pointer-events:none;
+    z-index:80;
+    font-size:14px;
+    color:var(--matcha);
+    opacity:0.85;
+    will-change:transform,opacity;
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    #splash{display:none;}
+    .hero-title .word{opacity:1;transform:none;animation:none;}
+    .leaf-particle{display:none;}
+  }
 </style>
 </head>
 <body>
+
+<div id="splash" aria-hidden="true">
+  <div class="splash-mark">夢</div>
+  <div class="splash-sub">Yume Cafe</div>
+</div>
 
 <header>
   <nav>
@@ -359,11 +413,19 @@
   <div class="hero-kanji" aria-hidden="true">夢</div>
   <div class="wrap hero-inner">
     <div class="eyebrow"><span class="rule"></span>Quiapo, Manila</div>
-    <h1>Slow down<br>with a bowl of <em>matcha</em>.</h1>
+    <h1 class="hero-title">
+      <span class="word" style="animation-delay:.05s">Slow</span>
+      <span class="word" style="animation-delay:.14s">down</span><br>
+      <span class="word" style="animation-delay:.23s">with</span>
+      <span class="word" style="animation-delay:.32s">a</span>
+      <span class="word" style="animation-delay:.41s">bowl</span>
+      <span class="word" style="animation-delay:.50s">of</span>
+      <span class="word accent" style="animation-delay:.59s">matcha.</span>
+    </h1>
     <p class="lede">Yume Cafe is a small matcha and houjicha bar tucked into J. Nepomuceno St., whisked to order, no shortcuts, made for lingering.</p>
     <div class="cta-row">
-      <a class="btn btn-solid" href="#menu">See the menu</a>
-      <a class="btn btn-outline" href="#visit">Find us</a>
+      <a class="btn btn-solid magnetic" href="#menu">See the menu</a>
+      <a class="btn btn-outline magnetic" href="#visit">Find us</a>
     </div>
     <div class="hero-meta">
       <div><span class="label">Hours</span>Mon–Sat 8am–8pm</div>
