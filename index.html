@@ -536,7 +536,10 @@
   <div class="splash-sub">Yume Cafe</div>
 </div>
 
-<audio id="bgMusic" src="yume.MP3" loop preload="none"></audio>
+<audio id="bgMusic" preload="none" loop>
+  <source src="yume.mp3" type="audio/mpeg">
+  <source src="yume.MP3" type="audio/mpeg">
+</audio>
 
 <header>
   <nav>
@@ -810,7 +813,7 @@
     });
   })();
 
-  // -------- BACKGROUND MUSIC PLAYER (yume.MP3, floating play/pause) --------
+  // -------- BACKGROUND MUSIC PLAYER (yume.mp3, floating play/pause) --------
   (function(){
     var music = document.getElementById('bgMusic');
     var btn = document.getElementById('musicBtn');
@@ -820,8 +823,9 @@
     music.addEventListener('error', function(){
       broken = true;
       btn.disabled = true;
-      btn.title = 'Music unavailable';
-      btn.setAttribute('aria-label', 'Music unavailable');
+      btn.title = 'Music file not found';
+      btn.setAttribute('aria-label', 'Music unavailable, file not found');
+      console.warn('[Yume Cafe] Background music failed to load. Check that yume.mp3 sits in the same folder as this HTML file, and that the filename case matches exactly (servers are case-sensitive).');
     });
 
     btn.addEventListener('click', function(){
@@ -835,8 +839,8 @@
             btn.setAttribute('aria-pressed', 'true');
             btn.title = 'Pause music';
             btn.setAttribute('aria-label', 'Pause music');
-          }).catch(function(){
-            // playback blocked or file missing, fail silently, no crash
+          }).catch(function(err){
+            console.warn('[Yume Cafe] Playback was blocked or failed:', err);
           });
         }
       } else {
